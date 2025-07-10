@@ -1,4 +1,6 @@
-require('dotenv').config();
+// require('dotenv').config();
+require('dotenv').config({ path: __dirname + '/.env' });
+console.log('DEBUG - MONGO_URL:', process.env.MONGO_URL);
 const MongoClient = require('mongodb').MongoClient;
 const fs = require('fs');
 
