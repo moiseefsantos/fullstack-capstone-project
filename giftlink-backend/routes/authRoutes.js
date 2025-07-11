@@ -102,4 +102,62 @@ router.post('/login', async (req, res) => {
   }
 });
 
+router.put('/update', [
+    body('firstName').not().isEmpty().withMessage('First name is required'),
+    body('lastName').not().isEmpty().withMessage('Last name is required')
+  ], async (req, res) => {
+    // Step 2: Validate input
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      logger.error('Validation errors in update request', errors.array());
+      return res.status(400).json({ errors: errors.array() });
+    }
+  
+    try {
+      // Step 3: Check if email is present in headers
+      const email = req.headers.email;
+      if (!email) {
+        logger.error('Email not found in the request headers');
+        return res.status(400).json({ error: "Email not found in the request headers" });
+      }
+  
+      // Step 4: Connect to MongoDB and access collection
+      const db = await connectToDatabase();
+      const collection = db.collection("users");
+  
+      // Step 5: Find user
+      const existingUser = await collection.findOne({ email });
+      if (!existingUser) {
+        logger.error('User not found');
+        return res.status(404).json({ error: "User not found" });
+      }
+  
+      // Step 6: Update user details
+      existingUser.firstName = req.body.firstName;
+      existingUser.lastName = req.body.lastName;
+      existingUser.updatedAt = new Date();
+  
+      const updatedUser = await collection.findOneAndUpdate(
+        { email },
+        { $set: existingUser },
+        { returnDocument: 'after' }
+      );
+  
+      // Step 7: Generate new JWT
+      const payload = {
+        user: {
+          id: updatedUser.value._id.toString(),
+        },
+      };
+      const authtoken = jwt.sign(payload, JWT_SECRET);
+  
+      logger.info('User updated successfully');
+      res.json({ authtoken });
+  
+    } catch (e) {
+      logger.error('Error updating user profile:', e.message);
+      return res.status(500).send('Internal server error');
+    }
+  });  
+
 module.exports = router;
