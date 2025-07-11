@@ -65,31 +65,36 @@ const handleSubmit = async (e) => {
 
     const payload = { ...updatedDetails };
     const response = await fetch(`${urlConfig.backendUrl}/api/auth/update`, {
-      //Step 1: Task 1
-      //Step 1: Task 2
-      //Step 1: Task 3
+      // Task 1: set method
+      method: 'PUT',
+      // Task 2: set headers
+      headers: {
+        "Authorization": `Bearer ${authtoken}`,
+        "Content-Type": "application/json",
+        "Email": email
+      },
+      // Task 3: set body to send user details
+      body: JSON.stringify(payload)
     });
 
     if (response.ok) {
-      // Update the user details in session storage
-      //Step 1: Task 4
-      //Step 1: Task 5
+      // Task 4: set the new name in the AppContext
+      setUserName(updatedDetails.name);
+      // Task 5: set user name in the session
+      sessionStorage.setItem("name", updatedDetails.name);
+
       setUserDetails(updatedDetails);
       setEditMode(false);
-      // Display success message to the user
       setChanged("Name Changed Successfully!");
       setTimeout(() => {
         setChanged("");
         navigate("/");
       }, 1000);
-
     } else {
-      // Handle error case
       throw new Error("Failed to update profile");
     }
   } catch (error) {
-    console.error(error);
-    // Handle error case
+    console.error("Error updating details:", error.message);
   }
 };
 
