@@ -1,26 +1,23 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import MainPage from './components/MainPage/MainPage';
-import LoginPage from './components/LoginPage/LoginPage';
-import RegisterPage from './components/RegisterPage/RegisterPage';
-import DetailsPage from './components/DetailsPage/DetailsPage';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
-import Navbar from './components/Navbar/Navbar';
+import { Link } from 'react-router-dom';
 
-function App() {
+export default function Navbar() {
   return (
-    <>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/app" element={<MainPage />} />
-        <Route path="/app/login" element={<LoginPage />} />
-        <Route path="/app/register" element={<RegisterPage />} />
-        <Route path="/app/product/:productId" element={<DetailsPage />} />
-      </Routes>
-    </>
+    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <Link className="navbar-brand" to="/">GiftLink</Link>
+      <div className="navbar-collapse show" id="navbarNav">
+        <ul className="navbar-nav">
+          <li className="nav-item">
+            <a className="nav-link" href="/home.html">Home</a>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/app">Gifts</Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/app/search">Search</Link>
+          </li>
+        </ul>
+      </div>
+    </nav>
   );
 }
-
-export default App;
