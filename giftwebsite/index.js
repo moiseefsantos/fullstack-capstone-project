@@ -1,4 +1,3 @@
-/*jshint esversion: 8 */
 const express = require('express');
 const path = require('path');
 const app = express();
