@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 import React, { useEffect, useState } from 'react';
 import './LoginPage.css';
 import { urlConfig } from '../../config';

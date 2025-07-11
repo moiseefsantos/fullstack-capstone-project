@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 const path = require('path');
 const dotenvPath = path.resolve(__dirname, '.env');
 
